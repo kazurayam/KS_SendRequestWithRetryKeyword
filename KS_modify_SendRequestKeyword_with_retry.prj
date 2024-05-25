@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Project>
    <description></description>
-   <name>KS_SendRequestaWithRetryKeyword</name>
+   <name>KS_modify_SendRequestKeyword_with_retry</name>
    <tag></tag>
    <UUID>15f1d4aa-f751-4c57-8bc1-a766b95b53bc</UUID>
    <migratedVersion>5.9.0</migratedVersion>
    <pageLoadTimeout>0</pageLoadTimeout>
-   <projectFileLocation>/Users/kazuakiurayama/katalon-workspace/KS_SendRequestWithRetryKeyword/KS_SendRequestWithRetryKeyword.prj</projectFileLocation>
+   <projectFileLocation>/Users/kazuakiurayama/katalon-workspace/KS_modify_SendRequestKeyword_with_retry/KS_modify_SendRequestKeyword_with_retry.prj</projectFileLocation>
    <sourceContent>
       <sourceFolderList>
          <sourceFolderConfiguration>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>Get Naughty URL with custom keyword</name>
+   <name>repeat Get Naughty URL using built-in keyword</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>e23d3285-dc46-4224-b7ed-8b025e62819c</testCaseGuid>
+   <testCaseGuid>246fc4df-4391-4509-95bd-1ee075234e6a</testCaseGuid>
 </TestCaseEntity>
