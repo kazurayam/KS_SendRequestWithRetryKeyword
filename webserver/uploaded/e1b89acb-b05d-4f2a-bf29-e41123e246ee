@@ -1,0 +1,25 @@
+------WebKitFormBoundaryRA3WmZxMsnNpBK4M
+Content-Disposition: form-data; name="upfile"; filename="console.properties"
+Content-Type: application/octet-stream
+
+#Wed Oct 04 18:08:34 JST 2023
+kobitonDeviceId=
+remoteWebDriverType=Selenium
+kobitonUserName=
+adoPlanId=
+adoPlanID=
+testcloudMobileId=
+kobitonToken=
+deviceId=
+testOpsProjectId=
+testOpsReleaseId=
+testOpsBuildId=
+qTestDestId=
+qTestDestType=
+testcloudEnvironmentId=
+testcloudEnvironmentID=
+remoteWebDriverUrl=
+adoTestRunName=
+testcloudTunnel=
+
+------WebKitFormBoundaryRA3WmZxMsnNpBK4M--

@@ -1,0 +1,18 @@
+------WebKitFormBoundaryV55t9PdCsQZ1W4QE
+Content-Disposition: form-data; name="upfile"; filename="data.xml"
+Content-Type: text/xml
+
+<?xml version="1.0" encoding="utf-8" ?>
+<items xmlns="https://forum.katalon.com/t/how-can-i-verify-how-many-title-tag-in-a-xml-page/113743/">
+    <item>
+        <title>Foo</title>
+    </item>
+    <item>
+        <title>Bar</title>
+    </item>
+    <item>
+        <title>Buz</title>
+    </item>
+</items>
+
+------WebKitFormBoundaryV55t9PdCsQZ1W4QE--
