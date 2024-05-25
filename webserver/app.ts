@@ -64,7 +64,7 @@ router.get("/:filename.json", async (_req: Request, params: Record<string, strin
 router.get("/naughty", async (_req: Request, params: Record<string, string>) => {
   const r = randomNumber({ min: 1, max: 100 });
   if (modulo(r, 5) === 0) {
-    const html = await Deno.readTextFile(`index.html`);
+    const html = await Deno.readTextFile(`error.html`);
     return new Response(html, { headers: {"content-type": "text/html; charset=utf-8"}});
   } else {
     const html = await Deno.readTextFile(`book.json`);
