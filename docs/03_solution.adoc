@@ -2,6 +2,35 @@
 
 It is ideal if the built-in `WS.sendRequest` keyword in Katalon Studio is changed to be robust against server errors. But I can't wait for their product development. Here I would show you my custom Groovy codes that give you the second best solution.
 
+=== Where to find the source code of com.kms.katalon.core.*
+
+In the following sections, I will present my Groovy classes. I wrote them based on the source of Katalon Studio. I found the source code of `com.kms.katalon.core.*` in the following directory of my Mac:
+
+```
+$ pwd
+/Applications/Katalon Studio.app/Contents/Eclipse/configuration/resources/source
+
+$ tree -l 1 .
+1  [error opening dir]
+.
+├── com.kms.katalon.core
+│   └── com.kms.katalon.core-sources.jar
+├── com.kms.katalon.core.cucumber
+│   └── com.kms.katalon.core.cucumber-sources.jar
+├── com.kms.katalon.core.mobile
+│   └── com.kms.katalon.core.mobile-sources.jar
+├── com.kms.katalon.core.testng
+│   └── com.kms.katalon.core.testng-sources.jar
+├── com.kms.katalon.core.webservice
+│   └── com.kms.katalon.core.webservice-sources.jar
+├── com.kms.katalon.core.webui
+│   └── com.kms.katalon.core.webui-sources.jar
+└── com.kms.katalon.core.windows
+    └── com.kms.katalon.core.windows-sources.jar
+```
+
+I unziped the jar files to get the sources in Java or Groovy. On Windows and Linux, you should be able to find the same jar files under the Katalon installed directory.
+
 === Custom Groovy classes
 
 I have developed 2 Groovy classes.
