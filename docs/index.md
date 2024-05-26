@@ -417,4 +417,4 @@ The existing Test Case script performed differently as the result of the 1st scr
 
 ## Conclusion
 
-The `com.kazurayam.ks.KzSendRequestKeyword` class and the `com.kazurayam.ks.WSBuiltInKeywordsModifier` class enables you to modify the built-in `WS.sendRequest(RequestObject,FailureHandling)` keyword on the fly. The modified `WS.sendRequest` method will be robust against the occational errors responded by the AUT. The volume of code changes required for the existing Test Cases could be small an manageable.
+The `com.kazurayam.ks.KzSendRequestKeyword` class and the `com.kazurayam.ks.WSBuiltInKeywordsModifier` class enable you to modify the built-in `WS.sendRequest(RequestObject,FailureHandling)` keyword on the fly. The modified `WS.sendRequest` method will be robust against the occational errors responded by the AUT. The volume of code changes required for the existing Test Cases could be small and manageable.
