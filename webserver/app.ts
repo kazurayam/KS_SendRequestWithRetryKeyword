@@ -59,7 +59,7 @@ router.get("/:filename.json", async (_req: Request, params: Record<string, strin
  *
  * In most cases, this url returns an JSON with HTTP STATUS=200.
  * But occasionaly it returns an HTML with HTTP STATUS=500.
- * The probability of HTML response is approximately 20%.
+ *
  */
 router.get("/naughty", async (_req: Request, params: Record<string, string>) => {
   const r = randomNumber({ min: 1, max: 100 });
