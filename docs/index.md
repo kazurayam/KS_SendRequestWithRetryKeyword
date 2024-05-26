@@ -6,8 +6,6 @@
 
 -   version: 0.3.0
 
--   source project: <https://gihub.com/kazurayam/KS_modify_SendRequestKeyword_with_retry>
-
 ## Problem to solve
 
 ### Application Under Test
@@ -131,7 +129,7 @@ You can download the zip of this repository from the
 
 ### How to start the process
 
-I would write `$PROJECT` to symbolized the directory where you located the project.
+I would write `$PROJECT` to represent the directory where you located the project on your machine.
 
 In the Terminal command line, do the following operations:
 
@@ -141,7 +139,7 @@ In the Terminal command line, do the following operations:
 
     Listening on http://localhost:3000/
 
-That’s it. The server is up. Now, you can get access to the naughty URL:
+That’s it. The server is up. Now, you should be able to get access to the naughty URL:
 
 -   <http://localhost:3000/naughty>
 
@@ -149,15 +147,15 @@ The [webserver/appstart.sh](https://github.com/kazurayam/KS_modify_SendRequestKe
 
     deno run --allow-net --allow-read --allow-write --allow-env app.ts
 
-The `appstart.sh` runs the `deno fun` command while specifying a TypeScript code that creates a HTTP server:
+The `appstart.sh` runs the `deno run` command while specifying a TypeScript code that creates a HTTP server:
 
 -   [webserver/apps.ts](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts)
 
-> It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project as you can mimic your UAT. I’ve found Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
+> It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. With it you can mimic your UAT and debug your tests. I’ve found that Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
 
 ## Solution
 
-I think it is ideal if the built-in `WS.sendRequest` keyword in Katalon Studio is changed to be robust against server errors. But I can’t wait for their product development. Here I would show you my custom Groovy codes that give you the next best solution.
+It is ideal if the built-in `WS.sendRequest` keyword in Katalon Studio is changed to be robust against server errors. But I can’t wait for their product development. Here I would show you my custom Groovy codes that give you the second best solution.
 
 ### Custom Groovy classes
 
@@ -291,6 +289,68 @@ I have developed 2 Test Cases to demonstrate how I can use the custom class `com
 I ran the latter script which repeats calling the former script for 10 times. The former script gets the naught URL, which of course often responds with error of STATUS=500. But the the `KzSendRequestWithRetry` hide ths server error and silently makes retry. So the later script finished successful.
 
 ![03 01 repeat using custom keyword](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/03_01_repeat_using_custom_keyword.png)
+
+#### Want to modify the `WS.sendRequest` keyword for retry
+
+Let me imagine that I have 200 Test Case scripts that calls the `WS.sendRequest` keyword. Now, I have developed a custom keyword `WSK.sendRequestWithRetry`. So, I should rewrite my scripts to use `WSK.sendRequestWithRetry` instead of `WS.sendRequest`. Oops, too much works. I don’t like to do it. Any other idea that requires far less rewrite works?
+
+Here I introduce the `com.kazurayam.ks.WSBuitlInKeywordsModifier`. I have made 2 Test Case scripts to demostrate how to use it.
+
+-   [Test Cases/my/get naughty URL using modified keyword](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20modified%20keyword/Script1716685136061.groovy)
+
+In this script, I call the `WSBuildInKeywordsModifier` to dynamically replace the implementation of `sendRequest(RequestObject,FailureHandling)` of the `com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords` class. The new implementation will link to the `com.kazurayam.ks.KzSendRequestKeyword` class, instead of the built-in `com.kms.katalon.core.webservice.kehyword.builtin.SendRequestKeyword`.
+
+    // Test Cases/my/get naughty URL using modified keyword
+
+    import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
+
+    import com.kazurayam.ks.WSBuiltInKeywordsModifier
+
+    import com.kms.katalon.core.model.FailureHandling
+    import com.kms.katalon.core.testobject.RequestObject
+    import com.kms.katalon.core.testobject.ResponseObject
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
+    import com.kms.katalon.core.webservice.keyword.builtin.SendRequestKeyword
+
+    // modify the implementation of "WS.sendRequest(RequestObject)" method 
+    // dynamically by Groovy Metaprogramming technique
+    WSBuiltInKeywordsModifier.modifySendRequest()
+
+    ResponseObject response = WS.sendRequest(findTestObject('Object Repository/naughty'))
+
+    WS.comment("status: " + response.getStatusCode())
+    WS.comment("content-type: " + response.getContentType())
+    println(response.getResponseBodyContent())
+
+    assert response.getStatusCode() == 200
+    assert response.getContentType().toLowerCase().contains("json")
+
+The most interesting thing in this script is the following 2 lines:
+
+    WSBuiltInKeywordsModifier.modifySendRequest()
+
+    ResponseObject response = WS.sendRequest(findTestObject('Object Repository/naughty'))
+
+Here, the `sendRequest` method of `WSBuiltInKeywords` class is dynamically modified. Then we continu using the built-in `WS.sendRequest` keyword. I do not call `WSK.sendRequestWithRetry` explicitly, but I do call it indirectly.
+
+Again, I made another scpript that calls the former script multiple times.
+
+-   [<https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20modified%20keyword/Script1716685188007.groovy>]()
+
+<!-- -->
+
+    // Test Cases/my/repeat Getting Naughty URL with built-in keyword
+
+    import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
+
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
+
+    for (i in 1..15) {
+        WS.callTestCase(findTestCase("my/get naughty URL using modified keyword"), null)
+        WS.delay(1)
+    }
+
+#### Want to minimize the code change
 
 ## Conclusion
 

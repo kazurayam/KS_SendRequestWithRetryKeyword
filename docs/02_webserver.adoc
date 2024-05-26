@@ -27,7 +27,7 @@ link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/releas
 
 === How to start the process
 
-I would write `$PROJECT` to symbolized the directory where you located the project.
+I would write `$PROJECT` to represent the directory where you located the project on your machine.
 
 In the Terminal command line, do the following operations:
 
@@ -39,7 +39,7 @@ $ /bin/bash ./appstart.sh
 Listening on http://localhost:3000/
 ```
 
-That's it. The server is up. Now, you can get access to the naughty URL:
+That's it. The server is up. Now, you should be able to get access to the naughty URL:
 
 - link:http://localhost:3000/naughty[]
 
@@ -50,11 +50,11 @@ The link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/bl
 include::../webserver/appstart.sh[]
 ----
 
-The `appstart.sh` runs the `deno fun` command while specifying a TypeScript code that creates a HTTP server:
+The `appstart.sh` runs the `deno run` command while specifying a TypeScript code that creates a HTTP server:
 
 - link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts[webserver/apps.ts]
 
 [quote]
 ____
-It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project as you can mimic your UAT. I've found Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
+It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. With it you can mimic your UAT and debug your tests. I've found that Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
 ____

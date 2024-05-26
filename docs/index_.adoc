@@ -4,7 +4,6 @@
 
 - author: kazurayam
 - version: {projectVersion}
-- source project: link:https://gihub.com/kazurayam/KS_modify_SendRequestKeyword_with_retry[]
 
 include::01_problem.adoc[]
 
