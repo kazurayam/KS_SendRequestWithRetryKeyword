@@ -1,26 +1,22 @@
 package com.kazurayam.ks
 
 import com.kms.katalon.core.configuration.RunConfiguration
-import com.kms.katalon.core.keyword.internal.KeywordMain
-import com.kms.katalon.core.keyword.internal.SupportLevel
 import com.kms.katalon.core.model.FailureHandling
 import com.kms.katalon.core.testobject.RequestObject
 import com.kms.katalon.core.testobject.ResponseObject
-import com.kms.katalon.core.testobject.TestObject
-import com.kms.katalon.core.webservice.common.HarLogger
-import com.kms.katalon.core.webservice.constants.StringConstants
 import com.kms.katalon.core.webservice.helper.WebServiceCommonHelper
-import com.kms.katalon.core.webservice.keyword.internal.WebserviceAbstractKeyword
 
 
 public class KzSendRequestKeyword {
+	
+	public KzSendRequestKeyword() {}
 
-	public static ResponseObject sendRequestWithRetry(RequestObject request) throws Exception {
+	public ResponseObject sendRequestWithRetry(RequestObject request) throws Exception {
 		FailureHandling flowControl = RunConfiguration.getDefaultFailureHandling()
 		return sendRequestWithRetry(request, flowControl)
 	}
 
-	public static ResponseObject sendRequestWithRetry(RequestObject request, FailureHandling flowControl) throws Exception {
+	public ResponseObject sendRequestWithRetry(RequestObject request, FailureHandling flowControl) throws Exception {
 		//println "called sendRequestWithRetry(RequestObject, ...)"
 		int max = 10
 		ResponseObject responseObject

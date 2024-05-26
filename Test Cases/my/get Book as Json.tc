@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>Get Naughty URL using modified built-in keyword</name>
+   <name>get Book as Json</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>1b82698d-7072-4c82-aee4-9612f5389ee9</testCaseGuid>
+   <testCaseGuid>a4441868-2dd6-482c-8d06-38c6fb27adf3</testCaseGuid>
 </TestCaseEntity>

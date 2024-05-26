@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>modifySendRequestKeyword</name>
+   <name>get naughty URL using modified keyword</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>49ab1ff2-c3c9-4cec-a007-da399fc8a9fd</testCaseGuid>
+   <testCaseGuid>1b82698d-7072-4c82-aee4-9612f5389ee9</testCaseGuid>
 </TestCaseEntity>

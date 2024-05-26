@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>repeat Get Naughty URL using modified built-in keyword</name>
+   <name>modifyBuiltInKeywords</name>
    <tag></tag>
    <comment></comment>
-   <testCaseGuid>7a23f593-b8bb-421a-a52c-848691b6e146</testCaseGuid>
+   <testCaseGuid>49ab1ff2-c3c9-4cec-a007-da399fc8a9fd</testCaseGuid>
 </TestCaseEntity>

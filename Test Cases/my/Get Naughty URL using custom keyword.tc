@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TestCaseEntity>
    <description></description>
-   <name>Get Naughty URL using custom keyword</name>
+   <name>get naughty URL using custom keyword</name>
    <tag></tag>
    <comment></comment>
    <testCaseGuid>e23d3285-dc46-4224-b7ed-8b025e62819c</testCaseGuid>
