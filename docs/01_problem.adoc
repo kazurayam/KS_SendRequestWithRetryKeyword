@@ -41,7 +41,7 @@ image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images
 include::../webserver/app.ts[lines=64..73]
 ----
 
-=== Built-in WS.sendRequest keyword fails on Server Error without any retry
+=== A Test Case with built-in WS.sendRequest keyword fails on Server Error
 
 We have a script link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy[Test Cases/my/get naughty URL using built-in keyword] that makes an HTTP request to the naughty URL using the Katalon built-in keyword link:https://docs.katalon.com/katalon-studio/keywords/keyword-description-in-katalon-studio/web-service-keywords/ws-send-request[WS.sendRequest].
 
@@ -59,7 +59,7 @@ We have another scipt link:https://github.com/kazurayam/KS_modify_SendRequestKey
 include::../Scripts/my/repeat getting naughty URL using built-in keyword/Script1716685152512.groovy[]
 ----
 
-The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former script fails? Because the built-in `WS.sendRequest` keyword returns a ResponseObject with HTTP STATUS=500 to the caller when the naughty URL replied an error.
+The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former Test Case script fails? Because the built-in `WS.sendRequest` keyword returns a ResponseObject with HTTP STATUS=500 to the caller when the naughty URL replied an error.
 
 === Problem: WS.sendRequest keyword is too fragile against Server error
 
