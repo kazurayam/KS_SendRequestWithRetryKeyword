@@ -85,6 +85,36 @@ Again, I made another scpript that calls the former script multiple times.
 include::../Scripts/my/repeat getting naughty URL using modified keyword/Script1716685188007.groovy[]
 ----
 
+When I ran the latter script, it just passed. The naughty URL reponded STATUS=500 error sometimes, but the modified `WS.sendRequest` keyword silently ignored the error and performed retry. Goodness.
+
+
 ==== Want to minimize the code change
 
+The final demonstration.
 
+I created a Test Case script
+
+-  link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy[Test Cases/my/modifyBuiltInKeywords]
+
+It is simple.
+
+[source, groovy]
+----
+include::../Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy[]
+----
+
+Now I created a Test Suite that combines 2 Test Cases:
+
+1. link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy[Test Cases/my/modifyBuiltInKeywords]
+2. link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy[Test Cases/my/modifyBuiltInKeywords]
+
+With the 1st Test Case "modifyBuiltInKeywords" in the Test Suite, the built-in keyword `WS.sendRequest` is replaced with new implementation with retry.
+
+Please note that the 2nd Test Case "get naught URL using built-in keyword" is an old one. Literally I made no change.
+
+
+When I ran this Test Suite, it just passed.
+
+image::images/04_01_testsuite.png[]
+
+The existing Test Case script performed differently as the result of the 1st script. Therefore, if you have hundreds of Test Cases that use the `WS.sendRequest` keyword, then you can add the `modifyBuiltInKeywords` script into your Test Suites. That's all. No need to change your existing Test Cases. The modified `WS.sendRequest` keyword will perform robust against the occasional server errors of STATUS=500.

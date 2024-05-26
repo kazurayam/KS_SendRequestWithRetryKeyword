@@ -350,8 +350,42 @@ Again, I made another scpript that calls the former script multiple times.
         WS.delay(1)
     }
 
+When I ran the latter script, it just passed. The naughty URL reponded STATUS=500 error sometimes, but the modified `WS.sendRequest` keyword silently ignored the error and performed retry. Goodness.
+
 #### Want to minimize the code change
+
+The final demonstration.
+
+I created a Test Case script
+
+-   [Test Cases/my/modifyBuiltInKeywords](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy)
+
+It is simple.
+
+    // Test Cases/my/modifyBuiltInKeywords
+
+    import com.kazurayam.ks.WSBuiltInKeywordsModifier
+
+    WSBuiltInKeywordsModifier.modifySendRequest()
+
+Now I created a Test Suite that combines 2 Test Cases:
+
+1.  [Test Cases/my/modifyBuiltInKeywords](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy)
+
+2.  [Test Cases/my/modifyBuiltInKeywords](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy)
+
+With the 1st Test Case "modifyBuiltInKeywords" in the Test Suite, the built-in keyword `WS.sendRequest` is replaced with new implementation with retry.
+
+Please note that the 2nd Test Case "get naught URL using built-in keyword" is an old one. Literally I made no change.
+
+When I ran this Test Suite, it just passed.
+
+<figure>
+<img src="images/04_01_testsuite.png" alt="04 01 testsuite" />
+</figure>
+
+The existing Test Case script performed differently as the result of the 1st script. Therefore, if you have hundreds of Test Cases that use the `WS.sendRequest` keyword, then you can add the `modifyBuiltInKeywords` script into your Test Suites. That’s all. No need to change your existing Test Cases. The modified `WS.sendRequest` keyword will perform robust against the occasional server errors of STATUS=500.
 
 ## Conclusion
 
-lorem ipsum
+The `com.kazurayam.ks.KzSendRequestKeyword` class and the `com.kazurayam.ks.WSBuiltInKeywordsModifier` class enables you to modify the built-in `WS.sendRequest(RequestObject,FailureHandling)` keyword on the fly. The modified `WS.sendRequest` method will be robust against the occational errors responded by the AUT. The volume of code changes required for the existing Test Cases could be small an managable.
