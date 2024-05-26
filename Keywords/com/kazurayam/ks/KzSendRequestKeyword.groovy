@@ -12,8 +12,8 @@ public class KzSendRequestKeyword {
 	public KzSendRequestKeyword() {}
 
 	public ResponseObject sendRequestWithRetry(
-							RequestObject request, 
-							FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling()) 
+							RequestObject request,
+							FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling())
 			throws Exception {
 		//println "called sendRequestWithRetry(RequestObject, ...)"
 		int max = 5
@@ -24,12 +24,12 @@ public class KzSendRequestKeyword {
 			//println("responseObject.getStatusCode()=" + responseObject.getStatusCode())
 			//println("responseObject.getHeaderFields()=" + responseObject.getHeaderFields())
 
-			// check if the responseObject is good
+			// check if the responseObject is acceptable or not
 			if (condition.call(responseObject)) {
 				break  // exit the loop
 			}
 
-			// the responseObject is not goo, so log error and retry sending the HTTP request
+			// the responseObject is not acceptable, so log error and retry conversation
 			println "retry " + i
 			// wait a while to be gentle to the server
 			Thread.sleep(1000)
