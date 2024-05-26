@@ -105,7 +105,7 @@ The problem is, as soon as the AUT respond an error, the test scirpt that uses `
 
 ### Feature request
 
-I, as a WebService tester using Katalon Studio, want my test to be more robust against possible flakiness of the AUT server. I want the `WS.sendRequest` keyword less sensitive against the temporary errors of the AUT server. I want the keyword to retry getting the target URL silently.
+I, as a WebService tester using Katalon Studio, want my test to be more robust against possible flakiness of the AUT server. I want the `WS.sendRequest` keyword to retry getting the target URL silently.
 
 ## Built-in Web Server as testbed
 
