@@ -6,7 +6,7 @@ This project bundles a HTTP Server that works on the localhost. Later, I will de
 
 - http://localhost:3000/naughty
 
-I will call this URL as *the naughty URL* for short. The naught URL has the following characteristics.
+I will call this URL as *the naughty URL* for short. The naughty URL has the following characteristics.
 
 (1) It returns an HTTP response with STATUS=200 and a JSON body:
 ```
