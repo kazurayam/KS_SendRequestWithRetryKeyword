@@ -26,7 +26,7 @@ I will call this URL as **the naughty URL** for short. The naught URL has the fo
       "publisher": "技術評論社"
     }
 
-![01 01 status=200](images/01_01_status=200.png)
+![01 01 status=200](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_01_status=200.png)
 
 \(2\) It occasionaly returns an HTTP response with STATUS=500 and a HTML body:
 
@@ -42,7 +42,7 @@ I will call this URL as **the naughty URL** for short. The naught URL has the fo
       </body>
     </html>
 
-![01 02 status=500](images/01_02_status=500.png)
+![01 02 status=500](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_02_status=500.png)
 
 \(3\) It returns an Error at random. The probability is approximately 33%. 1 error per 3 requests. You can read the server source in TypeScript [app.ts](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/webserver/app.ts) ,Line#64 :
 
@@ -101,7 +101,7 @@ In the real world, some Katalon users developed WebService testing projects whic
 It is often the case that the UAT (Application Under Test) is still being developed so that is not robust enough. The UAT may respond with STATUS=500 rather often.
 The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. Therefore the productivity of WebService testers using Katalon Studio would get down due to the fragility of the built-in keyword.
 
-![01 03 repeat using builtin keyword](images/01_03_repeat_using_builtin_keyword.png)
+![01 03 repeat using builtin keyword](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_03_repeat_using_builtin_keyword.png)
 
 ### Feature request
 
@@ -111,9 +111,9 @@ I, as a WebService tester using Katalon Studio, want my test to be more robust a
 
 Here I will explain how to launch a HTTP server locally on your machine.
 
-### Deno is required
+### ![02 01 Deno](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/02_01_Deno.png) is required
 
-On your machine, you need to install [Deno](https://deno.com/), the next generation JavaScript runtime. Please follow the installation instruction of their site.
+On your machine, you need to install [Deno](https://deno.com/), the next generation JavaScript runtime. Please follow the installation instruction on their site.
 
 I assume you have a bash Terminal where you can do this:
 
@@ -141,7 +141,7 @@ In the Terminal command line, do the following operations:
 
     Listening on http://localhost:3000/
 
-That’s it. You can get access to the naughty URL:
+That’s it. The server is up. Now, you can get access to the naughty URL:
 
 -   <http://localhost:3000/naughty>
 
@@ -149,15 +149,148 @@ The [webserver/appstart.sh](https://github.com/kazurayam/KS_modify_SendRequestKe
 
     deno run --allow-net --allow-read --allow-write --allow-env app.ts
 
-The `appstart.sh` runs the `deno fun` command while specifying the TypeScript code that makes a HTTP server
+The `appstart.sh` runs the `deno fun` command while specifying a TypeScript code that creates a HTTP server:
 
 -   [webserver/apps.ts](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts)
 
-> It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. Often, you can mimic the Upplication Under Test with minimum code. I found Deno is a lightweight but full-fledged platform to create a webserver as testbed.
+> It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project as you can mimic your UAT. I’ve found Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
 
 ## Solution
 
-lorem ipsum
+I think it is ideal if the built-in `WS.sendRequest` keyword in Katalon Studio is changed to be robust against server errors. But I can’t wait for their product development. Here I would show you my custom Groovy codes that give you the next best solution.
+
+### Custom Groovy classes
+
+I have developed 2 Groovy classes.
+
+#### com.kazurayam.ks.KzSendRequestKeyword
+
+-   [Keywords/com/kazurayam/ks/KzSendRequestKeyword.groovy](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Keywords/com/kazurayam/ks/KzSendRequestKeyword.groovy)
+
+This class implements an alternative to the built-in `WS.sendRequest(RequestObject, FailureHandling)` keyword. This class send an HTTP Reuest and returns the ResponseObject. The difference is that, when the server returned an HTTP respose with STATUS != 200 OK, then the class makes retry silently.
+
+    package com.kazurayam.ks
+
+    import com.kms.katalon.core.configuration.RunConfiguration
+    import com.kms.katalon.core.model.FailureHandling
+    import com.kms.katalon.core.testobject.RequestObject
+    import com.kms.katalon.core.testobject.ResponseObject
+    import com.kms.katalon.core.webservice.helper.WebServiceCommonHelper
+
+
+    public class KzSendRequestKeyword {
+
+        public KzSendRequestKeyword() {}
+
+        public ResponseObject sendRequestWithRetry(
+                                RequestObject request, 
+                                FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling()) 
+                throws Exception {
+            //println "called sendRequestWithRetry(RequestObject, ...)"
+            int max = 5
+            ResponseObject responseObject
+            for (i in 1..max) {
+                WebServiceCommonHelper.checkRequestObject(request)
+                responseObject = WebServiceCommonHelper.sendRequest(request)
+                //println("responseObject.getStatusCode()=" + responseObject.getStatusCode())
+                //println("responseObject.getHeaderFields()=" + responseObject.getHeaderFields())
+
+                // check if the responseObject is good
+                if (condition.call(responseObject)) {
+                    break  // exit the loop
+                }
+
+                // the responseObject is not goo, so log error and retry sending the HTTP request
+                println "retry " + i
+                // wait a while to be gentle to the server
+                Thread.sleep(1000)
+            }
+            return responseObject
+        }
+
+        private Closure condition = { ResponseObject responseObject ->
+            return responseObject.getStatusCode() >= 200 && responseObject.getStatusCode() < 300
+        }
+
+        public void setCondition(Closure cls) {
+            condition = cls
+        }
+    }
+
+#### com.kazurayam.ks.WSBuiltInKeywordsModifier
+
+-   [Keywords/com/kazurayam/ks/WSBuiltInKeywordsModifier.groovy](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Keywords/com/kazurayam/ks/WSBuiltInKeywordsModifier.groovy)
+
+This class modifies the `sendRequest` method of `com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords` class. Once the `modifySendRequest()` methos is called, the `sendRequest` method will be dynamically changed. The `WS.sendRequest()` call will no more uses the built-in class, but the method uses the `com.kazurayam.ks.KzSendRequestKeyword`.
+
+    package com.kazurayam.ks
+
+    import com.kms.katalon.core.configuration.RunConfiguration
+    import com.kms.katalon.core.model.FailureHandling
+    import com.kms.katalon.core.testobject.RequestObject
+    import com.kms.katalon.core.testobject.ResponseObject
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords
+
+
+    public class WSBuiltInKeywordsModifier {
+
+        public static void modifySendRequest() {
+
+            Closure<ResponseObject> cls = { RequestObject request, FailureHandling flowControl = RunConfiguration.getDefaultFailureHandling() ->
+                KzSendRequestKeyword kw = new KzSendRequestKeyword()
+                return kw.sendRequestWithRetry(request, flowControl)
+            }
+
+            WSBuiltInKeywords.metaClass.static.sendRequest = cls
+        }
+    }
+
+### Descriptions
+
+#### How the custom `sendRequestWithRetry` method works
+
+I have developed 2 Test Cases to demonstrate how I can use the custom class `com.kazurayam.ks.KzSendRequestWithRetry`.
+
+-   [Test Cases/my/get naught URL using custom keyword](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20custom%20keyword/Script1716685104583.groovy)
+
+<!-- -->
+
+    // Test Cases/my/get naughty URL using custom keyword
+
+    import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
+
+    import com.kms.katalon.core.testobject.ResponseObject
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
+    import com.kazurayam.ks.KzSendRequestKeyword
+
+    KzSendRequestKeyword kw = new KzSendRequestKeyword()
+    ResponseObject response = kw.sendRequestWithRetry(findTestObject('Object Repository/naughty'), )
+
+    WS.comment("status: " + response.getStatusCode())
+    WS.comment("content-type: " + response.getContentType())
+    println(response.getResponseBodyContent())
+
+    assert response.getStatusCode() == 200
+    assert response.getContentType().toLowerCase().contains("json")
+
+-   [Test Cases/my/repeat getting naughty URL using custom keyword](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20custom%20keyword/Script1716685168111.groovy)
+
+<!-- -->
+
+    // Test Cases/my/repeat getting naughty URL using modified keyword
+
+    import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
+
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
+
+    for (i in 1..10) {
+        WS.callTestCase(findTestCase("my/get naughty URL using custom keyword"), null)
+        WS.delay(1)
+    }
+
+I ran the latter script which repeats calling the former script for 10 times. The former script gets the naught URL, which of course often responds with error of STATUS=500. But the the `KzSendRequestWithRetry` hide ths server error and silently makes retry. So the later script finished successful.
+
+![03 01 repeat using custom keyword](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/03_01_repeat_using_custom_keyword.png)
 
 ## Conclusion
 

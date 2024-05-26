@@ -1,3 +1,54 @@
 == Solution
 
-lorem ipsum
+I think it is ideal if the built-in `WS.sendRequest` keyword in Katalon Studio is changed to be robust against server errors. But I can't wait for their product development. Here I would show you my custom Groovy codes that give you the next best solution.
+
+=== Custom Groovy classes
+
+I have developed 2 Groovy classes.
+
+==== com.kazurayam.ks.KzSendRequestKeyword
+
+- link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Keywords/com/kazurayam/ks/KzSendRequestKeyword.groovy[Keywords/com/kazurayam/ks/KzSendRequestKeyword.groovy]
+
+This class implements an alternative to the built-in `WS.sendRequest(RequestObject, FailureHandling)` keyword. This class send an HTTP Reuest and returns the ResponseObject. The difference is that, when the server returned an HTTP respose with STATUS != 200 OK, then the class makes retry silently.
+
+[source,groovy]
+----
+include::../Keywords/com/kazurayam/ks/KzSendRequestKeyword.groovy[]
+----
+
+==== com.kazurayam.ks.WSBuiltInKeywordsModifier
+
+- link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Keywords/com/kazurayam/ks/WSBuiltInKeywordsModifier.groovy[Keywords/com/kazurayam/ks/WSBuiltInKeywordsModifier.groovy]
+
+This class modifies the `sendRequest` method of `com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords` class. Once the `modifySendRequest()` methos is called, the `sendRequest` method will be dynamically changed. The `WS.sendRequest()` call will no more uses the built-in class, but the method uses the `com.kazurayam.ks.KzSendRequestKeyword`.
+
+[source,groovy]
+----
+include::../Keywords/com/kazurayam/ks/WSBuiltInKeywordsModifier.groovy[]
+----
+
+=== Descriptions
+
+==== How the custom `sendRequestWithRetry` method works
+
+I have developed 2 Test Cases to demonstrate how I can use the custom class `com.kazurayam.ks.KzSendRequestWithRetry`.
+
+- link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20custom%20keyword/Script1716685104583.groovy[Test Cases/my/get naught URL using custom keyword]
+
+[source,groovy]
+----
+include::../Scripts/my/get naughty URL using custom keyword/Script1716685104583.groovy[]
+----
+
+- link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20custom%20keyword/Script1716685168111.groovy[Test Cases/my/repeat getting naughty URL using custom keyword]
+
+[source,groovy]
+----
+include::../Scripts/my/repeat getting naughty URL using custom keyword/Script1716685168111.groovy[]
+----
+
+I ran the latter script which repeats calling the former script for 10 times. The former script gets the naught URL, which of course often responds with error of STATUS=500. But the the `KzSendRequestWithRetry` hide ths server error and silently makes retry. So the later script finished successful.
+
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/03_01_repeat_using_custom_keyword.png[]
+

@@ -16,7 +16,7 @@ I will call this URL as *the naughty URL* for short. The naught URL has the foll
   "publisher": "技術評論社"
 }
 ```
-image:images/01_01_status=200.png[]
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_01_status=200.png[]
 
 (2) It occasionaly returns an HTTP response with STATUS=500 and a HTML body:
 ```
@@ -32,7 +32,7 @@ image:images/01_01_status=200.png[]
   </body>
 </html>
 ```
-image:images/01_02_status=500.png[]
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_02_status=500.png[]
 
 (3) It returns an Error at random. The probability is approximately 33%. 1 error per 3 requests. You can read the server source in TypeScript link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/webserver/app.ts[app.ts] ,Line#64 :
 
@@ -68,7 +68,7 @@ In the real world, some Katalon users developed WebService testing projects whic
 It is often the case that the UAT (Application Under Test) is still being developed so that is not robust enough. The UAT may respond with STATUS=500 rather often.
 The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. Therefore the productivity of WebService testers using Katalon Studio would get down due to the fragility of the built-in keyword.
 
-image:images/01_03_repeat_using_builtin_keyword.png[]
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_03_repeat_using_builtin_keyword.png[]
 
 === Feature request
 
