@@ -94,7 +94,7 @@ We have another scipt [Test Cases/my/repeat getting naught URL using built-in ke
 
 The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former Test Case script fails? Because the built-in `WS.sendRequest` keyword returns a ResponseObject with HTTP STATUS=500 to the caller when the naughty URL replied an error.
 
-### Problem: WS.sendRequest keyword is too fragile against Server error
+### Problem: WS.sendRequest keyword doesn’t care Server errors
 
 In the real world, some Katalon users developed WebService testing projects which make repetitive calls to `WS.sendRequest` keyword. For example, one has a project that makes 200 hundreds times of call to `WS.sendRequest`.
 
