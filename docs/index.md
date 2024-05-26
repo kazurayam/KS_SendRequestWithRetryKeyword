@@ -92,7 +92,7 @@ We have another scipt [Test Cases/my/repeat getting naught URL using built-in ke
         WS.delay(1)
     }
 
-The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former script fails? Because the built-in `WS.sendRequest` keyword fails when the naughty URL replied a response with HTTP STATUS=500.
+The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former script fails? Because the built-in `WS.sendRequest` keyword returns a ResponseObject with HTTP STATUS=500 to the caller when the naughty URL replied an error.
 
 ### Problem: WS.sendRequest keyword is too fragile against Server error
 
@@ -374,7 +374,7 @@ Now I created a Test Suite that combines 2 Test Cases:
 
 1.  [Test Cases/my/modifyBuiltInKeywords](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy)
 
-2.  [Test Cases/my/modifyBuiltInKeywords](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy)
+2.  [Test Cases/my/repeat getting naughty URL using built-in keyword](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20built-in%20keyword/Script1716685152512.groovy)
 
 With the 1st Test Case "modifyBuiltInKeywords" in the Test Suite, the built-in keyword `WS.sendRequest` is replaced with new implementation with retry.
 

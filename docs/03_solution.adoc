@@ -106,7 +106,7 @@ include::../Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy[]
 Now I created a Test Suite that combines 2 Test Cases:
 
 1. link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/modifyBuiltInKeywords/Script1716684372390.groovy[Test Cases/my/modifyBuiltInKeywords]
-2. link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy[Test Cases/my/modifyBuiltInKeywords]
+2. link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20built-in%20keyword/Script1716685152512.groovy[Test Cases/my/repeat getting naughty URL using built-in keyword]
 
 With the 1st Test Case "modifyBuiltInKeywords" in the Test Suite, the built-in keyword `WS.sendRequest` is replaced with new implementation with retry.
 
