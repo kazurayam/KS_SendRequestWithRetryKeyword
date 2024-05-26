@@ -3,7 +3,8 @@
 = [Katalon Studio] Modifying WS.sendRequest keyword to support implicit retry on server error
 
 - author: kazurayam
-- version: {projectVersion}
+- document version: {projectVersion}
+- Katalon Studio version: v9.0.0 Free
 
 include::01_problem.adoc[]
 
