@@ -1,4 +1,4 @@
-// Test Cases/my/Get Naughty URL with built-in keyword
+// Test Cases/my/get naughty URL using modified keyword
 
 import static com.kms.katalon.core.testobject.ObjectRepository.findTestObject
 
@@ -20,4 +20,5 @@ WS.comment("status: " + response.getStatusCode())
 WS.comment("content-type: " + response.getContentType())
 println(response.getResponseBodyContent())
 
-assert response.getContentType().contains("application/json")
+assert response.getStatusCode() == 200
+assert response.getContentType().toLowerCase().contains("json")
