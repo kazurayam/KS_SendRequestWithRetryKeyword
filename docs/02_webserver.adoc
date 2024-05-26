@@ -56,5 +56,5 @@ The `appstart.sh` runs the `deno run` command while specifying a TypeScript code
 
 [quote]
 ____
-It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. With it you can mimic your UAT and debug your tests. I've found that Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
+It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. With it you can mimic your AUT and debug your tests. I've found that Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
 ____
