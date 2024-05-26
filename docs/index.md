@@ -99,17 +99,61 @@ The latter script repeats calling the former script for multiple times (actually
 In the real world, some Katalon users developed WebService testing projects which make repetitive calls to `WS.sendRequest` keyword. For example, one has a project that makes 200 hundreds times of call to `WS.sendRequest`.
 
 It is often the case that the UAT (Application Under Test) is still being developed so that is not robust enough. The UAT may respond with STATUS=500 rather often.
-The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops.
+The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. Therefore the productivity of WebService testers using Katalon Studio would get down due to the fragility of the built-in keyword.
 
 ![01 03 repeat using builtin keyword](images/01_03_repeat_using_builtin_keyword.png)
 
-If an error occured at the 100th request, the 101th and following requests would never be carried out. There the productivity of testers would go down due to the fragility of the built-in keyword.
+### Feature request
 
-I, as a WS Tester using Katalon Studio, want my test to be more robust against possible flakiness of the UAT server. I want the `WS.sendRequest` keyword to ignore temporary errors of the UAT server and retry getting the target URL silently.
+I, as a WebService tester using Katalon Studio, want my test to be more robust against possible flakiness of the UAT server. I want the `WS.sendRequest` keyword less sensitive against the temporary errors of the UAT server. I want the keyword to retry getting the target URL silently.
 
-## Built-in Web Server as test bed
+## Built-in Web Server as testbed
 
-lorem ipsum
+Here I will explain how to launch a HTTP server locally on your machine.
+
+### Deno is required
+
+On your machine, you need to install [Deno](https://deno.com/), the next generation JavaScript runtime. Please follow the installation instruction of their site.
+
+I assume you have a bash Terminal where you can do this:
+
+    $ deno --version
+    deno 1.43.6 (release, x86_64-apple-darwin)
+    v8 12.4.254.13
+    typescript 5.4.5
+
+The exact version does not matter. Any recent version will do.
+
+### Download the project
+
+You can download the zip of this repository from the
+[Releases](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/releases/) page. Download the latest one, and unzip it.
+
+### How to start the process
+
+I would write `$PROJECT` to symbolized the directory where you located the project.
+
+In the Terminal command line, do the following operations:
+
+    $ cd $PROJECT
+    $ cd webserver
+    $ /bin/bash ./appstart.sh
+
+    Listening on http://localhost:3000/
+
+That’s it. You can get access to the naughty URL:
+
+-   <http://localhost:3000/naughty>
+
+The [webserver/appstart.sh](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/appstart.sh) is a single line of shell script:
+
+    deno run --allow-net --allow-read --allow-write --allow-env app.ts
+
+The `appstart.sh` runs the `deno fun` command while specifying the TypeScript code that makes a HTTP server
+
+-   [webserver/apps.ts](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts)
+
+> It is nice to have a local HTTP server application which you can mimic the Upplication Under Test in a WebUI/WebService Test Automation project. I found Deno is a lightweight but full-fledged platform to create a webserver as testbed.
 
 ## Solution
 
