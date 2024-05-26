@@ -153,7 +153,7 @@ The `appstart.sh` runs the `deno fun` command while specifying the TypeScript co
 
 -   [webserver/apps.ts](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts)
 
-> It is nice to have a local HTTP server application which you can mimic the Upplication Under Test in a WebUI/WebService Test Automation project. I found Deno is a lightweight but full-fledged platform to create a webserver as testbed.
+> It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. Often, you can mimic the Upplication Under Test with minimum code. I found Deno is a lightweight but full-fledged platform to create a webserver as testbed.
 
 ## Solution
 
