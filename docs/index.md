@@ -81,36 +81,31 @@ Please note that this script asserts that the response has the HTTP STATUS "200 
 
 We have another scipt [Test Cases/my/repeat getting naught URL using built-in keyword](https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20built-in%20keyword/Script1716685152512.groovy).
 
-    ---
     // Test Cases/my/repeat getting naughty URL using built-in keyword
 
-import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
+    import static com.kms.katalon.core.testcase.TestCaseFactory.findTestCase
 
-import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
+    import com.kms.katalon.core.webservice.keyword.WSBuiltInKeywords as WS
 
-for (i in 1..10) {
-WS.callTestCase(findTestCase("my/get naughty URL using built-in keyword"), null)
-WS.delay(1)
-}
----
+    for (i in 1..10) {
+        WS.callTestCase(findTestCase("my/get naughty URL using built-in keyword"), null)
+        WS.delay(1)
+    }
 
-The latter script repeats calling the former script for multiple times (actually 15 times).
-
-When I run the latter script, it always stops with a failure of the former script sooner or later during the repetitive calls.
-
-Why the former script fails? --- The built-in WS.sendRequest keyword fails when the naughty URL responds with HTTP STATUS=500.
+The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former script fails? Because the built-in `WS.sendRequest` keyword fails when the naughty URL replied a response with HTTP STATUS=500.
 
 ### Problem: WS.sendRequest keyword is too fragile against Server error
 
 In the real world, some Katalon users developed WebService testing projects which make repetitive calls to `WS.sendRequest` keyword. For example, one has a project that makes 200 hundreds times of call to `WS.sendRequest`.
 
-It is often the case that the Application Under Test is still being developed so that is not robust enough. The UAT may respond with STATUS=500 sometimes.
-
-The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests wont’t be carried out.
+It is often the case that the UAT (Application Under Test) is still being developed so that is not robust enough. The UAT may respond with STATUS=500 rather often.
+The problem is, as soon as the UAT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops.
 
 ![01 03 repeat using builtin keyword](images/01_03_repeat_using_builtin_keyword.png)
 
-We, as a WS Tester using Katalon Studio, want our test to be more robust against possible flakiness of the UAT server. We want the `WS.sendRequest` keyword to ignore temporary errors of the UAT server and retry getting the target URL silently. Here I am proposing a feature request to Katalon to enhance the `WS.sendRequest` keyword implementation.
+If an error occured at the 100th request, the 101th and following requests would never be carried out. There the productivity of testers would go down due to the fragility of the built-in keyword.
+
+I, as a WS Tester using Katalon Studio, want my test to be more robust against possible flakiness of the UAT server. I want the `WS.sendRequest` keyword to ignore temporary errors of the UAT server and retry getting the target URL silently.
 
 ## Built-in Web Server as test bed
 
