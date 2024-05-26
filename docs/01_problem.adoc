@@ -1,0 +1,47 @@
+== Problem to solve
+
+=== Application Under Test
+
+This project bundles a HTTP Server. When the server is up, a URL becomes available:
+
+- http://localhost:3000/naughty
+
+
+I will describe how to start the server up later.
+
+This URL has following characteristics.
+
+(1) It returns an HTTP response with STATUS=200 and a JSON body:
+```
+{
+  "title": "JavaScript本格入門",
+  "price": 3200,
+  "publisher": "技術評論社"
+}
+```
+image:images/01_01_status=200.png[]
+
+(2) It occasionaly returns an HTTP response with STATUS=500 and a HTML body:
+```
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>500 Internal Server Error
+    </title>
+  </head>
+  <body>
+    <p>500 Internal Server Error
+    </p>
+  </body>
+</html>
+```
+image:images/01_02_status=500.png[]
+
+(3) It returns an Error at random. The probability is approximately 33%. 1 error per 3 requests. You can read the server source in JavaScript at link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/webserver/app.ts[] ,Line#64 :
+
+[source, javascript]
+----
+include::../webserver/app.ts[lines=57..73]
+----
+
+

@@ -8,39 +8,40 @@ import com.kms.katalon.core.webservice.helper.WebServiceCommonHelper
 
 
 public class KzSendRequestKeyword {
-	
+
 	public KzSendRequestKeyword() {}
 
-	public ResponseObject sendRequestWithRetry(RequestObject request) throws Exception {
-		FailureHandling flowControl = RunConfiguration.getDefaultFailureHandling()
-		return sendRequestWithRetry(request, flowControl)
-	}
-
-	public ResponseObject sendRequestWithRetry(RequestObject request, FailureHandling flowControl) throws Exception {
+	public ResponseObject sendRequestWithRetry(
+							RequestObject request, 
+							FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling()) 
+			throws Exception {
 		//println "called sendRequestWithRetry(RequestObject, ...)"
-		int max = 10
+		int max = 5
 		ResponseObject responseObject
 		for (i in 1..max) {
 			WebServiceCommonHelper.checkRequestObject(request)
 			responseObject = WebServiceCommonHelper.sendRequest(request)
-
 			//println("responseObject.getStatusCode()=" + responseObject.getStatusCode())
 			//println("responseObject.getHeaderFields()=" + responseObject.getHeaderFields())
 
-			// check if the status is OK
-			if (responseObject.getStatusCode() >= 200 && responseObject.getStatusCode() < 300) {
-				// check if the content-type is NOT html
-				String contentType = responseObject.getHeaderFields().get('content-type').get(0)
-				if (!contentType.contains('html')) {
-					break  // exit the loop
-				}
+			// check if the responseObject is good
+			if (condition.call(responseObject)) {
+				break  // exit the loop
 			}
-			// log error
+
+			// the responseObject is not goo, so log error and retry sending the HTTP request
 			println "retry " + i
 			// wait a while to be gentle to the server
 			Thread.sleep(1000)
-			// retry sending request
 		}
 		return responseObject
+	}
+
+	private Closure condition = { ResponseObject responseObject ->
+		return responseObject.getStatusCode() >= 200 && responseObject.getStatusCode() < 300
+	}
+
+	public void setCondition(Closure cls) {
+		condition = cls
 	}
 }

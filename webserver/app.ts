@@ -57,15 +57,15 @@ router.get("/:filename.json", async (_req: Request, params: Record<string, strin
 /* an naughty URL to test the case of
  *     https://forum.katalon.com/t/how-to-retry-at-verification-tab-on-api-objet/131571/5
  *
- * In most cases, this url returns an JSON.
- * But occasionaly it returns an HTML.
- * The probability of HTML response is approximately 20%.
+ * In most cases, this url returns an JSON with HTTP STATUS=200.
+ * But occasionaly it returns an HTML with HTTP STATUS=500.
+ *
  */
 router.get("/naughty", async (_req: Request, params: Record<string, string>) => {
   const r = randomNumber({ min: 1, max: 100 });
   if (modulo(r, 3) === 0) {
     const html = await Deno.readTextFile(`error.html`);
-    return new Response(html, { headers: {"content-type": "text/html; charset=utf-8"}});
+    return new Response(html, { status: 500, headers: {"content-type": "text/html; charset=utf-8"}});
   } else {
     const html = await Deno.readTextFile(`book.json`);
     return new Response(html, { headers: {"content-type": "application/json; charset=utf-8"}});
