@@ -3,8 +3,9 @@
 = [Katalon Studio] Modifying WS.sendRequest keyword to support implicit retry on server error
 
 - author: kazurayam
-- version: {projectVersion}
-- source project: link:https://gihub.com/kazurayam/KS_modify_SendRequestKeyword_with_retry[]
+- document version: {projectVersion}
+- Katalon Studio version: v9.0.0 Free
+- source project: link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry[https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry]
 
 include::01_problem.adoc[]
 

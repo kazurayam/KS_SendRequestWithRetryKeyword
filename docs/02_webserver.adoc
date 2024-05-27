@@ -1,3 +1,60 @@
-== Built-in Web Server as test bed
+== Built-in Web Server as testbed
 
-lorem ipsum
+Here I will explain how to launch the HTTP server as testbed locally on your machine.
+
+=== image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/02_01_Deno.png[] is required
+
+On your machine, you need to install link:https://deno.com/[Deno], the next generation JavaScript runtime. Please follow the installation instruction on their site.
+
+I assume you have a bash Terminal where you can do this:
+
+[source,console]
+----
+$ deno --version
+deno 1.43.6 (release, x86_64-apple-darwin)
+v8 12.4.254.13
+typescript 5.4.5
+----
+
+The exact version does not matter. Any recent version will do.
+
+=== Download the project
+
+You can download the zip of this repository from the
+link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/releases/[Releases] page. Download the latest one, and unzip it.
+
+
+
+=== How to start the process
+
+I would write `$PROJECT` to represent the directory where you located the project on your machine.
+
+In the Terminal command line, do the following operations:
+
+```
+$ cd $PROJECT
+$ cd webserver
+$ /bin/bash ./appstart.sh
+
+Listening on http://localhost:3000/
+```
+
+That's it. The server is up. Now, you should be able to get access to the naughty URL:
+
+- link:http://localhost:3000/naughty[]
+
+The link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/appstart.sh[webserver/appstart.sh] is a single line of shell script:
+
+[source,shell]
+----
+include::../webserver/appstart.sh[]
+----
+
+The `appstart.sh` runs the `deno run` command while specifying a TypeScript code that creates a HTTP server:
+
+- link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/webserver/app.ts[webserver/apps.ts]
+
+[quote]
+____
+It is nice to have a local HTTP server application in a WebUI/WebService Test Automation project. With it you can mimic your AUT and debug your tests. I've found that Deno is an easy-to-use but full-fledged platform to create a webserver as testbed.
+____

@@ -2,14 +2,11 @@
 
 === Application Under Test
 
-This project bundles a HTTP Server. When the server is up, a URL becomes available:
+This project bundles a HTTP Server that works on the localhost. Later, I will describe how to start the server on your machine. When the server is up, a URL becomes available:
 
 - http://localhost:3000/naughty
 
-
-I will describe how to start the server up later.
-
-This URL has following characteristics.
+I will call this URL as *the naughty URL* for short. The naughty URL has the following characteristics.
 
 (1) It returns an HTTP response with STATUS=200 and a JSON body:
 ```
@@ -19,7 +16,7 @@ This URL has following characteristics.
   "publisher": "技術評論社"
 }
 ```
-image:images/01_01_status=200.png[]
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_01_status=200.png[]
 
 (2) It occasionaly returns an HTTP response with STATUS=500 and a HTML body:
 ```
@@ -35,13 +32,44 @@ image:images/01_01_status=200.png[]
   </body>
 </html>
 ```
-image:images/01_02_status=500.png[]
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_02_status=500.png[]
 
-(3) It returns an Error at random. The probability is approximately 33%. 1 error per 3 requests. You can read the server source in JavaScript at link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/webserver/app.ts[] ,Line#64 :
+(3) It returns an Error at random. The probability is approximately 33%. 1 error per 3 requests. You can read the server source in TypeScript link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/webserver/app.ts[app.ts] ,Line#64 :
 
 [source, javascript]
 ----
-include::../webserver/app.ts[lines=57..73]
+include::../webserver/app.ts[lines=64..73]
 ----
 
+=== A Test Case with built-in WS.sendRequest keyword fails on Server Error
 
+We have a script link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/master/Scripts/my/get%20naughty%20URL%20using%20built-in%20keyword/Script1716685092640.groovy[Test Cases/my/get naughty URL using built-in keyword] that makes an HTTP request to the naughty URL using the Katalon built-in keyword link:https://docs.katalon.com/katalon-studio/keywords/keyword-description-in-katalon-studio/web-service-keywords/ws-send-request[WS.sendRequest].
+
+[source,groovy]
+----
+include::../Scripts/my/get naughty URL using built-in keyword/Script1716685092640.groovy[]
+----
+
+Please note that this script asserts that the response has the HTTP STATUS "200 OK" and the Content-Type to be "json". If the HTTP STATUS is found to be "500", then this script will fail.
+
+We have another scipt link:https://github.com/kazurayam/KS_modify_SendRequestKeyword_with_retry/blob/develop/Scripts/my/repeat%20getting%20naughty%20URL%20using%20built-in%20keyword/Script1716685152512.groovy[Test Cases/my/repeat getting naught URL using built-in keyword].
+
+[source, groovy]
+----
+include::../Scripts/my/repeat getting naughty URL using built-in keyword/Script1716685152512.groovy[]
+----
+
+The latter script repeats calling the former script for multiple times (actually 10 times). When I run the latter script, it always stops midway with a failure of the former script. Why the former Test Case script fails? Because the built-in `WS.sendRequest` keyword returns a ResponseObject with HTTP STATUS=500 to the caller when the naughty URL replied an error.
+
+=== Problem: WS.sendRequest keyword doesn't care Server errors
+
+In the real world, some Katalon users developed WebService testing projects which make repetitive calls to `WS.sendRequest` keyword. For example, one has a project that makes 200 hundreds times of call to `WS.sendRequest`.
+
+It is often the case that the AUT (Application Under Test) is still being developed so that is not robust enough. The AUT may respond with STATUS=500 rather often.
+The problem is, as soon as the AUT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. The productivity of WebService testers using Katalon Studio would go down.
+
+image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_03_repeat_using_builtin_keyword.png[]
+
+=== Feature request
+
+I, as a WebService tester using Katalon Studio, want my test to be more robust against possible flakiness of the AUT server. I want the `WS.sendRequest` keyword to retry getting the target URL silently.
