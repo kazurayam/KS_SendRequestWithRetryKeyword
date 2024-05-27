@@ -99,7 +99,7 @@ The latter script repeats calling the former script for multiple times (actually
 In the real world, some Katalon users developed WebService testing projects which make repetitive calls to `WS.sendRequest` keyword. For example, one has a project that makes 200 hundreds times of call to `WS.sendRequest`.
 
 It is often the case that the AUT (Application Under Test) is still being developed so that is not robust enough. The AUT may respond with STATUS=500 rather often.
-The problem is, as soon as the AUT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. Therefore the productivity of WebService testers using Katalon Studio would get down due to the fragility of the built-in keyword.
+The problem is, as soon as the AUT respond an error, the test scirpt that uses `WS.sendRequest` keyword stops. If an error occured at the 100th request, the 101th and following requests would never be carried out. The productivity of WebService testers using Katalon Studio would go down.
 
 ![01 03 repeat using builtin keyword](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/01_03_repeat_using_builtin_keyword.png)
 
@@ -109,7 +109,7 @@ I, as a WebService tester using Katalon Studio, want my test to be more robust a
 
 ## Built-in Web Server as testbed
 
-Here I will explain how to launch a HTTP server locally on your machine.
+Here I will explain how to launch the HTTP server as testbed locally on your machine.
 
 ### ![02 01 Deno](https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/02_01_Deno.png) is required
 
@@ -210,8 +210,8 @@ This class implements an alternative to the built-in `WS.sendRequest(RequestObje
         public KzSendRequestKeyword() {}
 
         public ResponseObject sendRequestWithRetry(
-                                RequestObject request, 
-                                FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling()) 
+                                RequestObject request,
+                                FailureHandling flowControl=RunConfiguration.getDefaultFailureHandling())
                 throws Exception {
             //println "called sendRequestWithRetry(RequestObject, ...)"
             int max = 5
@@ -222,12 +222,12 @@ This class implements an alternative to the built-in `WS.sendRequest(RequestObje
                 //println("responseObject.getStatusCode()=" + responseObject.getStatusCode())
                 //println("responseObject.getHeaderFields()=" + responseObject.getHeaderFields())
 
-                // check if the responseObject is good
+                // check if the responseObject is acceptable or not
                 if (condition.call(responseObject)) {
                     break  // exit the loop
                 }
 
-                // the responseObject is not goo, so log error and retry sending the HTTP request
+                // the responseObject is not acceptable, so log error and retry conversation
                 println "retry " + i
                 // wait a while to be gentle to the server
                 Thread.sleep(1000)

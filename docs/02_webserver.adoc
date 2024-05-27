@@ -1,6 +1,6 @@
 == Built-in Web Server as testbed
 
-Here I will explain how to launch a HTTP server locally on your machine.
+Here I will explain how to launch the HTTP server as testbed locally on your machine.
 
 === image:https://kazurayam.github.io/KS_modify_SendRequestKeyword_with_retry/images/02_01_Deno.png[] is required
 
