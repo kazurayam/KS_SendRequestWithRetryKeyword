@@ -146,4 +146,4 @@ When I ran this Test Suite, it just passed.
 
 image::images/04_01_testsuite.png[]
 
-The existing Test Case script performed differently as the result of the 1st script. Therefore, if you have hundreds of Test Cases that use the `WS.sendRequest` keyword, then you can add the `modifyBuiltInKeywords` script into your Test Suites. That's all. No need to change your existing Test Cases. The modified `WS.sendRequest` keyword will perform robust against the occasional server errors of STATUS=500.
+The existing Test Case script performed differently as the result of the 1st script. Therefore, if you have hundreds of Test Cases in Test Suites that use the `WS.sendRequest` keyword, then you can insert the `modifyBuiltInKeywords` script into the Test Suites at the 1st row. That's all. No need to change your existing Test Cases. The modified `WS.sendRequest` keyword will perform robust against the occasional server errors of STATUS=500.
